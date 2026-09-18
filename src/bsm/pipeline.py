@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 from bsm.data import yahoo
 from bsm.model.black_scholes import greeks, intrinsic, price
@@ -257,7 +257,7 @@ def _save_raw(chain: pd.DataFrame, ticker: str, snapshot_ts: pd.Timestamp, raw_d
 
 def run(config_path: str = "config.yaml", *, export: bool = True, tickers: list[str] | None = None) -> dict:
     """Run the pipeline once. Returns a status dict (also appended to the sheet's run_log)."""
-    load_dotenv()
+    load_dotenv(find_dotenv(usecwd=True))
     cfg = load_config(config_path)
     tickers = tickers or list(cfg["tickers"])
     snapshot_ts = pd.Timestamp.now(tz="UTC").floor("s")
@@ -290,7 +290,7 @@ def run(config_path: str = "config.yaml", *, export: bool = True, tickers: list[
     summary.to_csv(csv_dir / "iv_history_latest.csv", index=False)
 
     status = {
-        "snapshot_ts": snapshot_ts.isoformat(),
+        "snapshot_ts": snapshot_ts.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "status": "ok" if not errors else ("partial" if tables else "failed"),
         "rows_written": int(len(options)),
         "tickers_ok": ",".join(sorted(counts)),
