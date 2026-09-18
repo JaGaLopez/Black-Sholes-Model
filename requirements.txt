@@ -1,6 +1,7 @@
 # Verified installing + working on Python 3.14 (2026-09-18)
 yfinance>=0.2.50
 pandas>=2.2
+pyarrow>=17            # parquet snapshots in data/raw
 numpy>=2.0
 scipy>=1.14
 gspread>=6.0           # Google Sheets API (Tableau Public data source)
