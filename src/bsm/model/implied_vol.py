@@ -50,7 +50,7 @@ def implied_vol(market_price, S, K, T, r, q, option_type) -> np.ndarray:
         p = price(S, K, T, r, q, sigma, otype)
         v = greeks(S, K, T, r, q, sigma, otype)["vega"] * 100.0  # dPrice/dSigma (per 1.0)
         diff = p - mp
-        with np.errstate(divide="ignore", invalid="ignore"):
+        with np.errstate(divide="ignore", invalid="ignore", over="ignore"):
             step = np.where(v > 1e-12, diff / v, np.inf)
         # Converged when the price matches to float precision OR the sigma step is negligible.
         # (Deep ITM/OTM contracts have tiny vega, so a price tolerance alone leaves sigma sloppy.)
