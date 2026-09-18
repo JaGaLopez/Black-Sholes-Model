@@ -1,0 +1,28 @@
+# Runtime config for the pipeline. Edit freely.
+tickers: [AAPL, MSFT, NVDA, SPY, TSLA]
+
+options:
+  max_expiries: 6          # nearest N expiries per ticker
+  min_days_to_expiry: 1    # skip 0DTE (T ~ 0 blows up greeks/IV)
+  moneyness_band: 0.30     # keep strikes within +/-30% of spot
+  min_open_interest: 10    # drop illiquid contracts
+
+risk_free:
+  source: "^IRX"           # 13-week T-bill yield via yfinance (percent)
+  fallback: 0.04
+
+volatility:
+  realized_window_days: 30 # historical vol lookback for comparison vs IV
+
+refresh:
+  schedule: "daily after US close (~4:30pm ET, weekdays)"  # Tableau Public syncs Google Sheets once/day
+
+export:
+  google_sheets:
+    spreadsheet_name: "BSM Data"     # created/shared manually, see docs/GOOGLE_SETUP.md
+    credentials_env: GOOGLE_SERVICE_ACCOUNT_FILE
+    tabs:
+      options_latest: overwrite      # full chain snapshot, replaced each run
+      iv_history: append             # compact daily summary (per ticker/expiry), grows slowly
+      run_log: append
+  csv_dir: data/processed            # local mirror for debugging
