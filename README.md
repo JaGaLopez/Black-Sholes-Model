@@ -95,5 +95,3 @@ Screenshots go in `docs/screenshots/` once the dashboard is built and published.
   especially for deep in-the-money puts and dividend payers.
 - "Mispricing" compares the market mid with a BSM price at 30-day realized vol. It measures the volatility
   premium, not an arbitrage.
-
-Full design: [docs/SPEC.md](docs/SPEC.md).
